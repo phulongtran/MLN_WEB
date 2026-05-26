@@ -1,293 +1,228 @@
 import React from "react";
-import "./DebateCorner.css";
-import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import PageShell, { PageHero } from "../components/PageShell";
+
+const PRO_ARGUMENTS = [
+  {
+    initials: "AM",
+    name: "Prof. Aris M.",
+    role: "Dialectics Specialist",
+    text: "\"The contradiction between productive forces and relations of production remains the engine of history, even in the digital age.\"",
+    likes: 24,
+    action: "View Thesis",
+  },
+  {
+    initials: "LN",
+    name: "Le Nguyen",
+    role: "Advanced Student",
+    text: "Materialism doesn't ignore the digital; it identifies the hardware and server farms as the new means of production.",
+    likes: 12,
+    action: "Reply",
+  },
+];
+
+const COUNTER_ARGUMENTS = [
+  {
+    initials: "SK",
+    name: "Dr. S. K. Klein",
+    role: "Phenomenologist",
+    text: "Does historical materialism account for the subjective 'experience' of the worker in a purely algorithmic labor market?",
+    likes: 38,
+    action: "Challenge",
+  },
+  {
+    initials: "TH",
+    name: "Tran Hoai",
+    role: "Philosophy Minor",
+    text: "Is consciousness truly secondary if the 'metaverse' exists purely in the realm of perceived reality?",
+    likes: 5,
+    action: "Reply",
+  },
+];
+
+function ArgumentCard({ argument, variant }) {
+  // variant: "pro" (do) hoac "counter" (xanh duong)
+  const borderColor = variant === "pro" ? "border-l-red-800" : "border-l-blue-800";
+  const accentColor = variant === "pro" ? "text-red-800" : "text-blue-800";
+  const avatarBg = variant === "pro" ? "bg-red-800" : "bg-blue-800";
+
+  return (
+    <article
+      className={`bg-white rounded-xl shadow-md border border-gray-200 border-l-4 ${borderColor} p-5`}
+    >
+      <div className="flex items-center gap-3 mb-3">
+        <div
+          className={`h-10 w-10 rounded-full ${avatarBg} text-white flex items-center justify-center font-bold text-sm shrink-0`}
+        >
+          {argument.initials}
+        </div>
+        <div>
+          <h4 className="font-bold text-gray-900">{argument.name}</h4>
+          <p className="text-xs text-gray-500">{argument.role}</p>
+        </div>
+      </div>
+      <p className="text-gray-700 leading-relaxed mb-4">{argument.text}</p>
+      <div className="flex items-center justify-between text-sm">
+        <span className={`flex items-center gap-1 ${accentColor} font-semibold`}>
+          <span className="material-symbols-outlined text-base">thumb_up</span>
+          {argument.likes}
+        </span>
+        <button
+          type="button"
+          className={`${accentColor} font-semibold hover:underline`}
+        >
+          {argument.action}
+        </button>
+      </div>
+    </article>
+  );
+}
+
 const DebateCorner = () => {
   return (
-    <div className="debate-page">
-      <Navbar />
-
-      <div className="debate-layout">
-        {/* Sidebar */}
-        <aside className="debate-sidebar">
-          <div className="sidebar-top">
-            <h2>Study Modules</h2>
-            <p>Marxist-Leninist Philosophy</p>
+    <PageShell activeKey="debate">
+      <PageHero
+        eyebrow="Active Debate"
+        icon="diversity_3"
+        title={
+          <>
+            The Primacy of Matter over Consciousness
+            <span className="block text-3xl md:text-4xl mt-2 opacity-90">
+              Historical Materialism in the 21st Century
+            </span>
+          </>
+        }
+      >
+        <div className="flex items-center gap-4 mt-2">
+          <p className="text-white/80 text-sm">
+            <strong className="text-white">142 Active</strong> participants
+          </p>
+          <div className="flex -space-x-2">
+            <div className="h-8 w-8 rounded-full bg-red-900 border-2 border-red-800 flex items-center justify-center text-xs font-bold">
+              AM
+            </div>
+            <div className="h-8 w-8 rounded-full bg-red-900 border-2 border-red-800 flex items-center justify-center text-xs font-bold">
+              LN
+            </div>
+            <div className="h-8 w-8 rounded-full bg-white text-red-800 border-2 border-red-800 flex items-center justify-center text-xs font-bold">
+              +139
+            </div>
           </div>
+        </div>
+      </PageHero>
 
-          <nav className="sidebar-nav">
-            <a href="/flashcards">
-              <span className="material-symbols-outlined">cards</span>
-              Flashcards
-            </a>
-
-            <a href="/debate" className="active">
-              <span className="material-symbols-outlined">
-                diversity_3
+      <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto">
+        {/* Debate columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Pro column */}
+          <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6">
+            <div className="flex items-center gap-2 mb-5 pb-4 border-b border-gray-100">
+              <span className="material-symbols-outlined text-red-800">
+                balance
               </span>
-              Debate Corner
-            </a>
+              <h3 className="font-bold text-lg text-gray-900">Pro-Dialectic</h3>
+            </div>
+            <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+              {PRO_ARGUMENTS.map((arg, index) => (
+                <ArgumentCard key={index} argument={arg} variant="pro" />
+              ))}
+            </div>
+          </div>
 
-            <a href="/">
-              <span className="material-symbols-outlined">menu_book</span>
-              Lessons
-            </a>
-
-            <a href="/">
-              <span className="material-symbols-outlined">quiz</span>
-              Quiz System
-            </a>
-
-            <a href="/">
-              <span className="material-symbols-outlined">
-                description
+          {/* Counter column */}
+          <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6">
+            <div className="flex items-center gap-2 mb-5 pb-4 border-b border-gray-100">
+              <span className="material-symbols-outlined text-blue-800">
+                gavel
               </span>
-              PDF Docs
-            </a>
-
-            <a href="/">
-              <span className="material-symbols-outlined">insights</span>
-              Progress Tracking
-            </a>
-          </nav>
-
-          <div className="daily-btn">
-            <button>Start Daily Lesson</button>
-          </div>
-        </aside>
-
-        {/* Main */}
-        <main className="debate-main">
-          <div className="debate-grid">
-            {/* Topic Header */}
-            <div className="topic-header">
-              <div>
-                <span className="topic-badge">ACTIVE DEBATE</span>
-
-                <h1>
-                  The Primacy of Matter over Consciousness:
-                  <br />
-                  Historical Materialism in the 21st Century
-                </h1>
-              </div>
-
-              <div className="topic-users">
-                <p>Participants: 142 Active</p>
-
-                <div className="avatars">
-                  <div className="avatar">AM</div>
-                  <div className="avatar">LN</div>
-                  <div className="avatar more">+139</div>
-                </div>
-              </div>
+              <h3 className="font-bold text-lg text-gray-900">
+                Counter-Arguments
+              </h3>
             </div>
-
-            {/* Debate Content */}
-            <div className="debate-content">
-              {/* Left */}
-              <div className="debate-column">
-                <div className="column-title">
-                  <span className="material-symbols-outlined">
-                    balance
-                  </span>
-                  <h3>Pro-Dialectic</h3>
-                </div>
-
-                <div className="debate-scroll">
-                  <div className="argument-card pro">
-                    <div className="argument-user">
-                      <div className="user-avatar">AM</div>
-
-                      <div>
-                        <h4>Prof. Aris M.</h4>
-                        <p>Dialectics Specialist</p>
-                      </div>
-                    </div>
-
-                    <p className="argument-text">
-                      "The contradiction between productive forces and
-                      relations of production remains the engine of
-                      history, even in the digital age."
-                    </p>
-
-                    <div className="argument-footer">
-                      <span>
-                        <span className="material-symbols-outlined">
-                          thumb_up
-                        </span>
-                        24
-                      </span>
-
-                      <button>View Thesis</button>
-                    </div>
-                  </div>
-
-                  <div className="argument-card pro">
-                    <div className="argument-user">
-                      <div className="user-avatar">LN</div>
-
-                      <div>
-                        <h4>Le Nguyen</h4>
-                        <p>Advanced Student</p>
-                      </div>
-                    </div>
-
-                    <p className="argument-text">
-                      Materialism doesn't ignore the digital; it
-                      identifies the hardware and server farms as the
-                      new means of production.
-                    </p>
-
-                    <div className="argument-footer">
-                      <span>
-                        <span className="material-symbols-outlined">
-                          thumb_up
-                        </span>
-                        12
-                      </span>
-
-                      <button>Reply</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right */}
-              <div className="debate-column">
-                <div className="column-title">
-                  <span className="material-symbols-outlined">
-                    gavel
-                  </span>
-                  <h3>Counter-Arguments</h3>
-                </div>
-
-                <div className="debate-scroll">
-                  <div className="argument-card counter">
-                    <div className="argument-user">
-                      <div className="user-avatar">SK</div>
-
-                      <div>
-                        <h4>Dr. S. K. Klein</h4>
-                        <p>Phenomenologist</p>
-                      </div>
-                    </div>
-
-                    <p className="argument-text">
-                      Does historical materialism account for the
-                      subjective 'experience' of the worker in a purely
-                      algorithmic labor market?
-                    </p>
-
-                    <div className="argument-footer">
-                      <span>
-                        <span className="material-symbols-outlined">
-                          thumb_up
-                        </span>
-                        38
-                      </span>
-
-                      <button>Challenge</button>
-                    </div>
-                  </div>
-
-                  <div className="argument-card counter">
-                    <div className="argument-user">
-                      <div className="user-avatar">TH</div>
-
-                      <div>
-                        <h4>Tran Hoai</h4>
-                        <p>Philosophy Minor</p>
-                      </div>
-                    </div>
-
-                    <p className="argument-text">
-                      Is consciousness truly secondary if the
-                      'metaverse' exists purely in the realm of
-                      perceived reality?
-                    </p>
-
-                    <div className="argument-footer">
-                      <span>
-                        <span className="material-symbols-outlined">
-                          thumb_up
-                        </span>
-                        5
-                      </span>
-
-                      <button>Reply</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Input */}
-            <div className="debate-input">
-              <div className="input-avatar">U</div>
-
-              <input
-                type="text"
-                placeholder="Tham gia tranh biện với lập luận của bạn..."
-              />
-
-              <div className="input-actions">
-                <button className="attach-btn">
-                  Attach Cite
-                </button>
-
-                <button className="send-btn">
-                  Send Argument
-                </button>
-              </div>
-            </div>
-
-            {/* AI Panel */}
-            <div className="ai-panel">
-              <div className="ai-header">
-                <span className="material-symbols-outlined">
-                  psychology
-                </span>
-
-                <h3>Dialectic AI Analysis</h3>
-              </div>
-
-              <div className="ai-section">
-                <h4>LIVE SUMMARY</h4>
-
-                <p>
-                  The debate is currently centered on the definition
-                  of "base" and "superstructure" in the context of
-                  digital automation.
-                </p>
-              </div>
-
-              <div className="ai-quote">
-                <h4>SUGGESTED CONTEXT</h4>
-
-                <p>
-                  "It is not the consciousness of men that determines
-                  their existence, but their social existence that
-                  determines their consciousness." — Karl Marx
-                </p>
-              </div>
-
-              <div className="ai-alerts">
-                <h4>Logical Fallacy Alerts</h4>
-
-                <ul>
-                  <li>⚠ Strawman detected in Counter-Argument #4</li>
-                  <li>✔ Strong syllogism in Pro-Dialectic #2</li>
-                </ul>
-              </div>
-
-              <button className="report-btn">
-                Generate Debate Report
-              </button>
+            <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+              {COUNTER_ARGUMENTS.map((arg, index) => (
+                <ArgumentCard key={index} argument={arg} variant="counter" />
+              ))}
             </div>
           </div>
-        </main>
+        </div>
+
+        {/* Input bar */}
+        <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-4 flex items-center gap-3 mb-8">
+          <div className="h-10 w-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm shrink-0">
+            U
+          </div>
+          <input
+            type="text"
+            placeholder="Tham gia tranh biện với lập luận của bạn..."
+            className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 focus:border-red-800 focus:ring-1 focus:ring-red-800 outline-none"
+          />
+          <button
+            type="button"
+            className="border-2 border-red-800 text-red-800 font-semibold px-4 py-2 rounded-lg hover:bg-red-50 transition-colors hidden md:block"
+          >
+            Attach Cite
+          </button>
+          <button
+            type="button"
+            className="bg-red-800 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-900 transition-colors"
+          >
+            Send Argument
+          </button>
+        </div>
+
+        {/* AI panel */}
+        <div className="bg-blue-50 p-8 rounded-xl shadow-md border-l-4 border-red-800">
+          <div className="flex items-center gap-2 mb-5">
+            <span className="material-symbols-outlined text-red-800">
+              psychology
+            </span>
+            <h3 className="font-bold text-lg text-gray-900">
+              Dialectic AI Analysis
+            </h3>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="text-xs uppercase tracking-wider text-gray-500 font-bold mb-2">
+                Live Summary
+              </h4>
+              <p className="text-gray-700">
+                The debate is currently centered on the definition of "base"
+                and "superstructure" in the context of digital automation.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-xs uppercase tracking-wider text-gray-500 font-bold mb-2">
+                Suggested Context
+              </h4>
+              <p className="text-gray-700 italic">
+                "It is not the consciousness of men that determines their
+                existence, but their social existence that determines their
+                consciousness." — Karl Marx
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 pt-5 border-t border-gray-200">
+            <h4 className="text-xs uppercase tracking-wider text-gray-500 font-bold mb-3">
+              Logical Fallacy Alerts
+            </h4>
+            <ul className="space-y-1 text-sm text-gray-700">
+              <li>• Strawman detected in Counter-Argument #4</li>
+              <li>• Strong syllogism in Pro-Dialectic #2</li>
+            </ul>
+          </div>
+
+          <button
+            type="button"
+            className="mt-6 bg-red-800 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-red-900 transition-colors"
+          >
+            Generate Debate Report
+          </button>
+        </div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 

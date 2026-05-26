@@ -2,62 +2,49 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import HomePages from "./pages/HomePages";
 import Flashcards from "./pages/Flashcards";
+import FlashcardDetail from "./pages/FlashcardDetail";
 import DebateCorner from "./pages/DebateCorner";
 import Quiz from "./pages/Quiz";
 import Lesson from "./pages/Lesson";
+import Mindmap from "./pages/Mindmap";
+import Docs from "./pages/Docs";
+import Settings from "./pages/Settings";
+import NotFound from "./pages/NotFound";
 
-/* QUIZ PAGES */
+// QUIZ SUB-PAGES
 import MatchingQuiz from "./pages/MatchingQuiz";
 import AnalysisQuiz from "./pages/AnalysisQuiz";
 import EssayQuiz from "./pages/EssayQuiz";
 import ImageQuiz from "./pages/ImageQuiz";
 import MCQQuiz from "./pages/MCQQuiz";
-import FlashcardDetail from "./pages/FlashcardDetail";
+
 function App() {
   return (
     <Routes>
-      {/* Default */}
-      <Route path="/" element={<Navigate to="/home" />} />
+      {/* Default -> /home */}
+      <Route path="/" element={<Navigate to="/home" replace />} />
 
-      {/* Main Pages */}
+      {/* Main pages */}
       <Route path="/home" element={<HomePages />} />
       <Route path="/flashcards" element={<Flashcards />} />
+      <Route path="/flashcards/:id" element={<FlashcardDetail />} />
       <Route path="/debate" element={<DebateCorner />} />
       <Route path="/quiz" element={<Quiz />} />
       <Route path="/lessons" element={<Lesson />} />
-      <Route
-  path="/flashcards/:id"
-  element={<FlashcardDetail />}
-/>
-      {/* Quiz Pages */}
-      <Route
-        path="/quiz/matching"
-        element={<MatchingQuiz />}
-      />
+      <Route path="/mindmap" element={<Mindmap />} />
+      <Route path="/docs" element={<Docs />} />
+      <Route path="/settings" element={<Settings />} />
 
-      <Route
-        path="/quiz/analysis"
-        element={<AnalysisQuiz />}
-      />
+      {/* Quiz sub-pages */}
+      <Route path="/quiz/matching" element={<MatchingQuiz />} />
+      <Route path="/quiz/analysis" element={<AnalysisQuiz />} />
+      <Route path="/quiz/essay" element={<EssayQuiz />} />
+      <Route path="/quiz/mcq" element={<MCQQuiz />} />
+      <Route path="/image-quiz" element={<ImageQuiz />} />
 
-      <Route
-        path="/quiz/essay"
-        element={<EssayQuiz />}
-      />
-
-      <Route
-        path="/image-quiz"
-        element={<ImageQuiz />}
-      />
-
-      <Route
-        path="/quiz/mcq"
-        element={<MCQQuiz />}
-      />
+      {/* Catch-all 404 */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
-    
-
-    
   );
 }
 

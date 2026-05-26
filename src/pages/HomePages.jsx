@@ -1,63 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import PageShell, { StartDailyLessonButton } from '../components/PageShell';
+
 export default function HomePages() {
-  const [chatOpen, setChatOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const toggleChat = () => setChatOpen((s) => !s);
+  const toggleChat = () => setIsChatOpen((prev) => !prev);
+
   return (
-    <>
-      <Navbar />
-
-      <div className="flex">
-        {/* Sidebar */}
-        <aside className="fixed left-0 top-16 bottom-0 w-72 py-2 z-40 bg-white border-r border-gray-200 overflow-y-auto hidden lg:flex flex-col">
-          <div className="px-6 py-4 mb-4">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="material-symbols-outlined text-red-800">school</span>
-              <h2 className="font-bold text-lg text-gray-900">Study Modules</h2>
-            </div>
-            <p className="text-xs text-gray-500 uppercase tracking-wider">Marxist-Leninist Philosophy</p>
-          </div>
-
-          <nav className="flex-1 space-y-1">
-            <Link className="flex items-center gap-3 bg-primary-container text-on-primary-container rounded-lg px-4 py-3 mx-2 my-1 translate-x-1 transition-transform" to="/flashcards">
-                <span className="material-symbols-outlined">cards</span>
-                <span className="font-label-sm text-label-sm">Flashcards</span>
-            </Link>
-            <Link className="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 mx-2 my-1 transition-colors" to="/debate">
-                <span className="material-symbols-outlined">diversity_3</span>
-                <span className="font-label-sm text-label-sm">Debate </span>
-            </Link>
-            <Link className="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 mx-2 my-1 transition-colors" to="/lessons">
-                <span className="material-symbols-outlined">menu_book</span>
-                <span className="font-label-sm text-label-sm">Lessons</span>
-            </Link>
-            <Link className="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 mx-2 my-1 transition-colors" to="/quiz">
-                <span className="material-symbols-outlined">quiz</span>
-                <span className="font-label-sm text-label-sm">Quiz System</span>
-            </Link>
-            <Link className="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 mx-2 my-1 transition-colors" to="/docs">
-                <span className="material-symbols-outlined">description</span>
-                <span className="font-label-sm text-label-sm">PDF Docs</span>
-            </Link>
-            <Link className="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 mx-2 my-1 transition-colors" to="/progress-tracking">
-                <span className="material-symbols-outlined">insights</span>
-                <span className="font-label-sm text-label-sm">Progress Tracking</span>
-            </Link>
-          </nav>
-
-          <div className="mt-auto px-4 pb-8">
-            <button className="w-full bg-red-800 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-red-900 transition-all flex items-center justify-center gap-2">
-              <span className="material-symbols-outlined">play_circle</span>
-              Start Daily Lesson
-            </button>
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 lg:ml-72 min-h-screen">
-          {/* Hero Section */}
+    <PageShell activeKey="home" footer={StartDailyLessonButton}>
+      <>
+        {/* Hero Section */}
           <section className="w-full bg-red-800 py-16 px-12 relative overflow-hidden">
             <div className="max-w-4xl mx-auto text-center relative z-10">
               <h2 className="font-bold text-5xl text-white mb-6">Triết học Mác – Lênin</h2>
@@ -100,34 +53,38 @@ export default function HomePages() {
                 </div>
               </div>
 
-              <div className="bg-blue-50 p-6 rounded-xl shadow-md border border-gray-200 flex flex-col justify-between">
+              <Link
+                to="/mindmap"
+                className="bg-gradient-to-br from-red-700 to-red-900 p-6 rounded-xl shadow-md border border-red-900 flex flex-col justify-between text-white hover:shadow-xl hover:-translate-y-1 transition-all"
+              >
                 <div>
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="font-bold text-lg text-gray-900">Your Progress</h3>
-                    <span className="bg-red-800 text-white px-2 py-1 rounded text-xs font-bold">LVL 12</span>
+                    <h3 className="font-bold text-lg">Mindmap</h3>
+                    <span className="material-symbols-outlined">account_tree</span>
                   </div>
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">Course Mastery</span>
-                        <span className="text-red-800 font-bold">64%</span>
-                      </div>
-                      <div className="w-full bg-gray-300 rounded-full h-2">
-                        <div className="bg-red-800 h-2 rounded-full" style={{ width: '64%' }} />
-                      </div>
+                  <p className="text-sm text-white/80 mb-4">
+                    Mục lục tổng dạng sơ đồ tư duy: Chương → Đề mục → Bài học.
+                  </p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full bg-white" />
+                      <span>3 Chương</span>
                     </div>
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">Weekly Goal</span>
-                        <span className="text-red-800 font-bold">4/5 hrs</span>
-                      </div>
-                      <div className="w-full bg-gray-300 rounded-full h-2">
-                        <div className="bg-gray-600 h-2 rounded-full" style={{ width: '80%' }} />
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full bg-white/70" />
+                      <span>8 Đề mục</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full bg-white/50" />
+                      <span>23 Bài học liên kết</span>
                     </div>
                   </div>
                 </div>
-              </div>
+                <div className="mt-4 inline-flex items-center gap-1 text-sm font-semibold">
+                  Khám phá sơ đồ
+                  <span className="material-symbols-outlined text-base">arrow_forward</span>
+                </div>
+              </Link>
             </div>
 
             {/* Lesson Cards */}
@@ -243,7 +200,7 @@ export default function HomePages() {
               </div>
 
               {/* Knowledge Map */}
-              <div className="bg-blue-50 p-8 rounded-xl shadow-md border border-gray-200 cursor-pointer">
+              <Link to="/mindmap" className="bg-blue-50 p-8 rounded-xl shadow-md border border-gray-200 cursor-pointer block hover:shadow-lg transition-all">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="font-bold text-lg text-gray-900">Knowledge Map</h3>
                   <span className="material-symbols-outlined text-gray-600">open_in_full</span>
@@ -254,15 +211,12 @@ export default function HomePages() {
                     <p className="text-gray-500 text-sm mt-2">Interactive mapping of core Marxist concepts</p>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
-        </main>
-      </div>
-
-      {/* AI Chat Bubble */}
+        {/* AI Chat Bubble */}
       <div className="fixed bottom-8 right-8 z-50">
-        {chatOpen && (
+        {isChatOpen && (
           <div className="absolute bottom-20 right-0 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden mb-4">
             <div className="bg-red-800 p-4 text-white flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -306,7 +260,8 @@ export default function HomePages() {
             <span className="relative inline-flex rounded-full h-4 w-4 bg-yellow-400" />
           </span>
         </button>
-      </div>
-    </>
+        </div>
+      </>
+    </PageShell>
   );
 }

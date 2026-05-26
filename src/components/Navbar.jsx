@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import {
   House,
   Layers3,
@@ -7,134 +7,178 @@ import {
   BookOpen,
   CircleHelp,
   FileText,
-  Settings,
+  Settings as SettingsIcon,
   MessageCircle,
+  Menu,
+  X,
 } from "lucide-react";
+import { SIDEBAR_NAV_ITEMS } from "../constants";
+
+// Navbar top — gom tat ca dieu huong chinh
+// Tren desktop: hien thi 6 NavLink + icon o phia phai
+// Tren mobile: nut hamburger mo drawer chua cac muc sidebar
+const TOP_NAV_ITEMS = [
+  { to: "/home",       label: "Home",       Icon: House },
+  { to: "/flashcards", label: "Flashcards", Icon: Layers3 },
+  { to: "/debate",     label: "Debate",     Icon: MessagesSquare },
+  { to: "/lessons",    label: "Lessons",    Icon: BookOpen },
+  { to: "/quiz",       label: "Quiz",       Icon: CircleHelp },
+  { to: "/docs",       label: "Docs",       Icon: FileText },
+];
 
 export default function Navbar() {
-  const [chatOpen, setChatOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const toggleChat = () => setChatOpen((s) => !s);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <header className="flex justify-between items-center w-full px-12 h-16 sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-      <div className="flex items-center gap-4">
-        <img
-          alt="Dialectic Academy Logo"
-          className="h-10 w-10 object-contain rounded-md"
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAYAAAB/HSuDAAAQAElEQVR4AezdB5wURbrH8X/vLkkUFMVA2F1QVMw5Y845ZwkmzNkznTKLit4ZzywGVERMGF/PnDFnPXNCxKwYkbz9Vs2uCpI2THdXVf/6M83sznRXPc+3ZoepZ3p6ysSCAAIIIIAAAggggAACCCCAAAKhC4gCQPBDTIIIIIAAAggggAACCCCAAAIIiAIADwIEEEAAAQQQQAABBBBAAAEEghcwCXIEgEHgggACCCCAAAIIIIAAAggggEDIAjY3CgBWgRUBBBBAAAEEEEAAAQQQQACBcAWKmVEAKDLwDwIIIIAAAggggAACCCCAAAKiAMCbIIAAAggggAACCCCAAAIIIBAqAYvAJhzBIBBAAAEEEEAAAQQQQACBcAVsLoLeFHvNI5IARBAAAEEAAQQQQACB/gZYdSELhM0Y/kUAAQQQQAABBBBAAAEEEEAARIBBAAAHxgBrD2q3fTJf+wQkCCCAQEgCxiAmGJpRl1r9fmELZvmkm6muXcVyV1C3BvJL2PGu9DAJMZ9Ri0KvPEEJCCGAAAIIIIAAAggggEAcBMaY4l5wgzEj91xjBVgE6RN3YoGMAQQQQACBfBEpJt0Rvx1j6T3nTSmhPKAzxKRQ6Kgnneg8k6hG2LKvyAQfLFnrm5VgUO5k0t4YFc/LVVKTsSzEHEPdJI1gvR8fWGxoKZVPiYYLgBhBQQHEEAAAQQQQAABBBBAICQCv/2A55R7ZmwNXzqcZPMcC4nVq8f8lqmQPW2+z8l1VdwvMLyUvgvBaT1VOMcCnRvkbPc2XdRbVZFXAhVJKZJCwT1IpvvLyqHF8gXsOXtYvO+jLxNLWdDH8T0hm4XY0DZGE9iZKkqQf+pHJTfZMkbZxN/yiKyqJJtx0ORLXgtOPmZngRZvGPa1SHp8Zj5WYYZY1fq0x6VDvFacFLgJLxBVp20sWiVN6Z3BNFf4/fKZkMTYvBMEpJhVfcLJU6hvHqkH/2sZON7Q+u/VNWGpbYhjPT+3kcwMnJJx2uMUMvGYF8nzGrR5sXlLYJu0K8EQHXtKm6TYN+0rFrQrz7VCk/pVvxm/v9dLc3qU4WqEDPyp5h4u3l+s3jMPPZvkLxZqPD6vwkKZbdGsQ1gF5Wdz9Q5nRkx+/8CILPo7Bd1Sw2CYlQ55MjBjBstfOhS3HfGYqfqNrgFWWiOw="
-        />
-        <h1
-          className="text-[28px] text-[#570013] font-bold"
-          style={{ fontFamily: '"Libre Caslon Text", serif' }}
-        >
-          Dialectic Academy
-        </h1>
-      </div>
+    <>
+      <header className="flex justify-between items-center w-full px-4 md:px-12 h-16 sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+        {/* Logo */}
+        <div className="flex items-center gap-3 md:gap-4">
+          {/* Hamburger — chi hien tren mobile */}
+          <button
+            type="button"
+            aria-label="Mở menu điều hướng"
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="md:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-700"
+          >
+            <Menu size={24} />
+          </button>
 
-      <nav className="hidden md:flex items-center gap-14">
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            `group relative transition-all duration-200 ${
-              isActive ? "text-red-800" : "text-gray-600 hover:text-red-800"
-            }`
-          }
-        >
-          <House size={26} strokeWidth={2.2} />
-
-          <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
-            Home
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/flashcards"
-          className={({ isActive }) =>
-            `group relative transition-all duration-200 ${
-              isActive ? "text-red-800" : "text-gray-600 hover:text-red-800"
-            }`
-          }
-        >
-          <Layers3 size={26} strokeWidth={2.2} />
-
-          <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
-            Flashcards
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/debate"
-          className={({ isActive }) =>
-            `group relative transition-all duration-200 ${
-              isActive ? "text-red-800" : "text-gray-600 hover:text-red-800"
-            }`
-          }
-        >
-          <MessagesSquare size={26} strokeWidth={2.2} />
-
-          <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
-            Debate
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/lessons"
-          className={({ isActive }) =>
-            `group relative transition-all duration-200 ${
-              isActive ? "text-red-800" : "text-gray-600 hover:text-red-800"
-            }`
-          }
-        >
-          <BookOpen size={26} strokeWidth={2.2} />
-
-          <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
-            Lessons
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/quiz"
-          className={({ isActive }) =>
-            `group relative transition-all duration-200 ${
-              isActive ? "text-red-800" : "text-gray-600 hover:text-red-800"
-            }`
-          }
-        >
-          <CircleHelp size={26} strokeWidth={2.2} />
-
-          <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
-            Quiz
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/docs"
-          className={({ isActive }) =>
-            `group relative transition-all duration-200 ${
-              isActive ? "text-red-800" : "text-gray-600 hover:text-red-800"
-            }`
-          }
-        >
-          <FileText size={26} strokeWidth={2.2} />
-
-          <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
-            Docs
-          </span>
-        </NavLink>
-      </nav>
-
-      <div className="flex items-center gap-4">
-        <button className="p-2 hover:bg-blue-200 rounded-full transition-all text-gray-600" onClick={toggleChat}>
-          <MessageCircle size={20} />
-        </button>
-        <button className="p-2 hover:bg-blue-200 rounded-full transition-all text-gray-600">
-          <Settings size={20} />
-        </button>
-        <div className="h-8 w-8 bg-red-800 rounded-full flex items-center justify-center text-white font-bold text-sm">
-          JS
+          <Link to="/home" className="flex items-center gap-3">
+            <img
+              alt="Dialectic Academy Logo"
+              className="h-9 w-9 md:h-10 md:w-10 object-contain rounded-md"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAYAAAB/HSuDAAAQAElEQVR4AezdB5wURbrH8X/vLkkUFMVA2F1QVMw5Y845ZwkmzNkznTKLit4ZzywGVERMGF/PnDFnPXNCxKwYkbz9Vs2uCpI2THdXVf/6M83sznRXPc+3ZoepZ3p6ysSCAAIIIIAAAggggAACCCCAAAKhC4gCQPBDTIIIIIAAAggggAACCCCAAAIIiAIADwIEEEAAAQQQQAABBBBAAAEEghcwCXIEgEHgggACCCCAAAIIIIAAAggggEDIAjY3CgBWgRUBBBBAAAEEEEAAAQQQQACBcAWKmVEAKDLwDwIIIIAAAggggAACCCCAAAKiAMCbIIAAAggggAACCCCAAAIIIBAqAYvAJhzBIBBAAAEEEEAAAQQQQACBcAVsLoLeFHvNI5IARBAAAEEAAQQQQACB/gZYdSELhM0Y/kUAAQQQQAABBBBAAAEEEEAARIBBAAAHxgBrD2q3fTJf+wQkCCCAQEgCxiAmGJpRl1r9fmELZvmkm6muXcVyV1C3BvJL2PGu9DAJMZ9Ri0KvPEEJCCGAAAIIIIAAAggggEAcBMaY4l5wgzEj91xjBVgE6RN3YoGMAQQQQACBfBEpJt0Rvx1j6T3nTSmhPKAzxKRQ6Kgnneg8k6hG2LKvyAQfLFnrm5VgUO5k0t4YFc/LVVKTsSzEHEPdJI1gvR8fWGxoKZVPiYYLgBhBQQHEEAAAQQQQAABBBBAICQCv/2A55R7ZmwNXzqcZPMcC4nVq8f8lqmQPW2+z8l1VdwvMLyUvgvBaT1VOMcCnRvkbPc2XdRbVZFXAhVJKZJCwT1IpvvLyqHF8gXsOXtYvO+jLxNLWdDH8T0hm4XY0DZGE9iZKkqQf+pHJTfZMkbZxN/yiKyqJJtx0ORLXgtOPmZngRZvGPa1SHp8Zj5WYYZY1fq0x6VDvFacFLgJLxBVp20sWiVN6Z3BNFf4/fKZkMTYvBMEpJhVfcLJU6hvHqkH/2sZON7Q+u/VNWGpbYhjPT+3kcwMnJJx2uMUMvGYF8nzGrR5sXlLYJu0K8EQHXtKm6TYN+0rFrQrz7VCk/pVvxm/v9dLc3qU4WqEDPyp5h4u3l+s3jMPPZvkLxZqPD6vwkKZbdGsQ1gF5Wdz9Q5nRkx+/8CILPo7Bd1Sw2CYlQ55MjBjBstfOhS3HfGYqfqNrgFWWiOw="
+            />
+            <h1
+              className="hidden sm:block text-xl md:text-[28px] text-[#570013] font-bold"
+              style={{ fontFamily: '"Libre Caslon Text", serif' }}
+            >
+              Dialectic Academy
+            </h1>
+          </Link>
         </div>
-      </div>
-    </header>
+
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center gap-10 lg:gap-14">
+          {TOP_NAV_ITEMS.map(({ to, label, Icon }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) =>
+                `group relative transition-all duration-200 ${
+                  isActive ? "text-red-800" : "text-gray-600 hover:text-red-800"
+                }`
+              }
+            >
+              <Icon size={26} strokeWidth={2.2} />
+              <span className="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
+                {label}
+              </span>
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Right cluster */}
+        <div className="flex items-center gap-2 md:gap-4">
+          <button
+            type="button"
+            aria-label="Trò chuyện với Dialectic AI"
+            title="Trò chuyện"
+            className="p-2 hover:bg-blue-100 rounded-full transition-all text-gray-600"
+          >
+            <MessageCircle size={20} />
+          </button>
+          <Link
+            to="/settings"
+            aria-label="Cài đặt"
+            title="Cài đặt"
+            className="p-2 hover:bg-blue-100 rounded-full transition-all text-gray-600"
+          >
+            <SettingsIcon size={20} />
+          </Link>
+          <div className="h-8 w-8 bg-red-800 rounded-full flex items-center justify-center text-white font-bold text-sm">
+            JS
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile drawer */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-[60] bg-black/40 md:hidden"
+          onClick={closeMobileMenu}
+        >
+          <aside
+            className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+              <h2 className="font-bold text-lg text-red-800">Menu</h2>
+              <button
+                type="button"
+                aria-label="Đóng menu"
+                onClick={closeMobileMenu}
+                className="p-2 hover:bg-gray-100 rounded-lg text-gray-700"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <nav className="flex-1 overflow-y-auto p-3 space-y-1">
+              <NavLink
+                to="/home"
+                onClick={closeMobileMenu}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-3 rounded-lg ${
+                    isActive
+                      ? "bg-red-50 text-red-800 font-semibold"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`
+                }
+              >
+                <span className="material-symbols-outlined">home</span>
+                Trang chủ
+              </NavLink>
+
+              {SIDEBAR_NAV_ITEMS.map((item) => (
+                <NavLink
+                  key={item.key}
+                  to={item.to}
+                  onClick={closeMobileMenu}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-4 py-3 rounded-lg ${
+                      isActive
+                        ? "bg-red-50 text-red-800 font-semibold"
+                        : "text-gray-700 hover:bg-gray-100"
+                    }`
+                  }
+                >
+                  <span className="material-symbols-outlined">{item.icon}</span>
+                  {item.label}
+                </NavLink>
+              ))}
+
+              <NavLink
+                to="/settings"
+                onClick={closeMobileMenu}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-3 rounded-lg ${
+                    isActive
+                      ? "bg-red-50 text-red-800 font-semibold"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`
+                }
+              >
+                <span className="material-symbols-outlined">settings</span>
+                Cài đặt
+              </NavLink>
+            </nav>
+          </aside>
+        </div>
+      )}
+    </>
   );
 }

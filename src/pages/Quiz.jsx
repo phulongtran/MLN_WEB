@@ -1,9 +1,9 @@
-import React from "react";
-import "./Quiz.css";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import PageShell, { PageHero, StartDailyLessonButton } from "../components/PageShell";
 
-const quizModules = [
+// Cau hinh cac module quiz cua he thong
+const QUIZ_MODULES = [
   {
     icon: "quiz",
     level: "Nâng cao",
@@ -13,7 +13,6 @@ const quizModules = [
     question: "2/25 câu",
     link: "/quiz/mcq",
   },
-
   {
     icon: "edit_note",
     level: "Trung bình",
@@ -23,7 +22,6 @@ const quizModules = [
     question: "9/20 câu",
     link: "/quiz/essay",
   },
-
   {
     icon: "cards",
     level: "Cơ bản",
@@ -33,7 +31,6 @@ const quizModules = [
     question: "12/15 câu",
     link: "/quiz/matching",
   },
-
   {
     icon: "menu_book",
     level: "Cơ bản",
@@ -43,7 +40,6 @@ const quizModules = [
     question: "20/20 câu",
     link: "/quiz/analysis",
   },
-
   {
     icon: "image_search",
     level: "Trung bình",
@@ -55,199 +51,130 @@ const quizModules = [
   },
 ];
 
+const QUIZ_FILTERS = ["Tất cả", "Duy vật", "Biện chứng", "Lịch sử"];
+
 const Quiz = () => {
+  const [activeFilter, setActiveFilter] = useState(QUIZ_FILTERS[0]);
+
   return (
-    <div className="quiz-page">
-      <Navbar />
-
-      <div className="quiz-layout">
-        {/* SIDEBAR */}
-        <aside className="quiz-sidebar">
-          <div className="sidebar-top">
-            <div className="sidebar-icon">
-              <span className="material-symbols-outlined">
-                shield
-              </span>
-            </div>
-
-            <div>
-              <h2>Study Modules</h2>
-
-              <p>
-                Marxist-Leninist Philosophy
-              </p>
-            </div>
-          </div>
-
-          <nav className="sidebar-nav">
-            <Link to="/flashcards">
-              <span className="material-symbols-outlined">
-                cards
-              </span>
-
-              Flashcards
-            </Link>
-
-            <Link to="/debate">
-              <span className="material-symbols-outlined">
-                diversity_3
-              </span>
-
-              Debate Corner
-            </Link>
-
-            <Link to="/lessons">
-              <span className="material-symbols-outlined">
-                menu_book
-              </span>
-
-              Lessons
-            </Link>
-
-            <div className="active">
-              <span className="material-symbols-outlined">
-                quiz
-              </span>
-
-              Quiz System
-            </div>
-
-            <Link to="/docs">
-              <span className="material-symbols-outlined">
-                description
-              </span>
-
-              PDF Docs
-            </Link>
-          </nav>
-
-          <button className="daily-btn">
-            <span className="material-symbols-outlined">
-              play_circle
+    <PageShell activeKey="quiz" footer={StartDailyLessonButton}>
+      <PageHero
+        eyebrow="Quiz System"
+        icon="quiz"
+        title="Hệ thống Kiểm tra Kiến thức"
+        subtitle='"Các nhà triết học đã chỉ giải thích thế giới bằng nhiều cách khác nhau, song vấn đề là cải tạo thế giới." — Karl Marx'
+      >
+        <div className="flex flex-col md:flex-row gap-4 max-w-3xl">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              placeholder="Tìm kiếm chương học hoặc chủ đề..."
+              className="w-full bg-white/10 border border-white/30 text-white placeholder:text-white/50 rounded-full pl-12 pr-4 py-3 focus:ring-2 focus:ring-white focus:border-transparent outline-none backdrop-blur-sm"
+            />
+            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/70">
+              search
             </span>
-
-            Start Daily Lesson
-          </button>
-        </aside>
-
-        {/* MAIN */}
-        <main className="quiz-main">
-          {/* HERO */}
-          <div className="quiz-hero">
-            <h1>
-              Hệ thống Kiểm tra Kiến thức
-            </h1>
-
-            <div className="quote-box">
-              <p>
-                "Các nhà triết học đã chỉ giải
-                thích thế giới bằng nhiều cách
-                khác nhau, song vấn đề là cải
-                tạo thế giới."
-              </p>
-
-              <span>— Karl Marx</span>
-            </div>
-
-            {/* SEARCH */}
-            <div className="search-filter">
-              <div className="search-box">
-                <span className="material-symbols-outlined">
-                  search
-                </span>
-
-                <input
-                  type="text"
-                  placeholder="Tìm kiếm chương học hoặc chủ đề..."
-                />
-              </div>
-
-              <div className="filter-buttons">
-                <button className="active">
-                  Tất cả
-                </button>
-
-                <button>Duy vật</button>
-
-                <button>Biện chứng</button>
-
-                <button>Lịch sử</button>
-              </div>
-            </div>
           </div>
+        </div>
 
-          {/* QUIZ GRID */}
-          <div className="quiz-grid">
-            {quizModules.map((quiz, index) => (
-              <Link
-                to={quiz.link}
-                className="quiz-card"
-                key={index}
-              >
-                <div className="quiz-card-top">
-                  <div className="quiz-card-icon">
-                    <span className="material-symbols-outlined">
-                      {quiz.icon}
-                    </span>
-                  </div>
+        <div className="flex flex-wrap gap-2 mt-4">
+          {QUIZ_FILTERS.map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => setActiveFilter(filter)}
+              className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                activeFilter === filter
+                  ? "bg-white text-red-800"
+                  : "bg-white/10 text-white border border-white/30 hover:bg-white/20"
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+      </PageHero>
 
-                  <span className="level-badge">
-                    {quiz.level}
+      <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto">
+        <h2 className="font-bold text-3xl text-gray-900 mb-6 flex items-center gap-3">
+          <span className="material-symbols-outlined text-red-800">
+            psychology
+          </span>
+          Các module luyện tập
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {QUIZ_MODULES.map((quiz) => (
+            <Link
+              to={quiz.link}
+              key={quiz.link}
+              className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition-all border border-gray-200 hover:-translate-y-1"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="h-12 w-12 rounded-xl bg-red-50 text-red-800 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-2xl">
+                    {quiz.icon}
                   </span>
                 </div>
-
-                <h3>{quiz.title}</h3>
-
-                <p>{quiz.desc}</p>
-
-                <div className="quiz-progress">
-                  <div className="progress-info">
-                    <span>
-                      Hoàn thành {quiz.progress}%
-                    </span>
-
-                    <span>{quiz.question}</span>
-                  </div>
-
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{
-                        width: `${quiz.progress}%`,
-                      }}
-                    ></div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-
-            {/* SPECIAL CARD */}
-            <div className="special-card">
-              <div className="special-tag">
-                Thử thách
+                <span className="text-xs font-bold uppercase bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                  {quiz.level}
+                </span>
               </div>
 
-              <div className="quiz-card-icon special-icon">
-                <span className="material-symbols-outlined">
+              <h3 className="font-bold text-lg text-gray-900 mb-2">
+                {quiz.title}
+              </h3>
+              <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+                {quiz.desc}
+              </p>
+
+              <div className="mt-auto">
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span className="text-gray-600">
+                    Hoàn thành {quiz.progress}%
+                  </span>
+                  <span className="text-red-800 font-bold">
+                    {quiz.question}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-red-800 h-2 rounded-full transition-all"
+                    style={{ width: `${quiz.progress}%` }}
+                  />
+                </div>
+              </div>
+            </Link>
+          ))}
+
+          {/* Special challenge card */}
+          <div className="bg-gradient-to-br from-red-700 to-red-900 p-5 rounded-xl shadow-md text-white border border-red-900 flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <div className="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <span className="material-symbols-outlined text-2xl">
                   auto_awesome
                 </span>
               </div>
-
-              <h3>Ôn tập Tổng hợp</h3>
-
-              <p>
-                Sự kết hợp ngẫu nhiên của tất
-                cả các dạng bài tập.
-              </p>
-
-              <button>
-                Bắt đầu ngay
-              </button>
+              <span className="text-xs font-bold uppercase bg-white/20 px-2 py-1 rounded">
+                Thử thách
+              </span>
             </div>
+
+            <h3 className="font-bold text-lg mb-2">Ôn tập Tổng hợp</h3>
+            <p className="text-white/80 text-sm mb-4 flex-1">
+              Sự kết hợp ngẫu nhiên của tất cả các dạng bài tập.
+            </p>
+
+            <button
+              type="button"
+              className="bg-white text-red-800 font-semibold py-2 rounded-lg hover:bg-red-50 transition-all"
+            >
+              Bắt đầu ngay
+            </button>
           </div>
-        </main>
+        </div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 
